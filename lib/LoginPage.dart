@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'registerpage.dart'; // Ensure you import the RegisterPage
-import 'dashboard.dart'; // Import the DashboardPage
+import 'homepage.dart'; // Import the HomePage
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -66,7 +66,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    LoginForm(),
+                    LoginForm(), // This widget handles the login form and navigation
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -136,90 +136,14 @@ class _LoginFormState extends State<LoginForm> {
         ),
       );
 
+      // Navigate to HomePage after successful login
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const Dashboard(),
+          builder: (context) => HomePage(), // Ensure you pass the right widget
         ),
       );
-
-      // Navigate to another page after login, if needed
     }
-  }
-
-  void _showForgotPasswordDialog() {
-    // Define a key for the form inside the dialog
-    final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
-    final TextEditingController emailController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Forgot Password'),
-          content: Form(
-            key: _dialogFormKey, // Attach the key to the form
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Enter your email address to reset your password.'),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: const Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (_dialogFormKey.currentState!.validate()) {
-                  // If the form is valid, print the email and show a confirmation
-                  String email = emailController.text;
-                  print('Forgot Password Email: $email');
-
-                  Navigator.of(context).pop(); // Close the dialog
-
-                  // Show confirmation message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content:
-                          Text('Password reset link has been sent to $email'),
-                      backgroundColor: Colors.blue,
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                }
-              },
-              child: const Text('Submit'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -300,6 +224,81 @@ class _LoginFormState extends State<LoginForm> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showForgotPasswordDialog() {
+    // Define a key for the form inside the dialog
+    final GlobalKey<FormState> _dialogFormKey = GlobalKey<FormState>();
+    final TextEditingController emailController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Forgot Password'),
+          content: Form(
+            key: _dialogFormKey, // Attach the key to the form
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('Enter your email address to reset your password.'),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: const Icon(Icons.email),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_dialogFormKey.currentState!.validate()) {
+                  // If the form is valid, print the email and show a confirmation
+                  String email = emailController.text;
+                  print('Forgot Password Email: $email');
+
+                  Navigator.of(context).pop(); // Close the dialog
+
+                  // Show confirmation message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content:
+                          Text('Password reset link has been sent to $email'),
+                      backgroundColor: Colors.blue,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
